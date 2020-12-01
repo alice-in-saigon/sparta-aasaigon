@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All About Saigon | Result</title>
+    <!--    Bulma-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+
+    <!--    FONT-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!--    CSS-->
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+
+        .inputbox .field {
+            width: 50%;
+        }
+
+        button {
+            margin-top: 2rem;
+        }
+
+        aside {
+            width: 20%;
+        }
+
+        .buttons {
+            margin: 1rem;
+        }
+
+    </style>
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLbNKKvyuwCEQuM9KwR9x5FbeK-Q0KrtE&callback=initMap">
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            readPlace();
+        });
+
+        function readPlace() {
+            $.ajax({
+                type: "GET",
+                url: "/places",
+                data: {},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        let tags = response['tags']
+                        for (let i = 0; i < tags.length; i++) {
+                            makeTagList(tags[i]['tag']);
+                        }
+
+                    } else {
+                        alert('태그를 받아오지 못했습니다');
+                    }
+                }
+            })
+        }
+
+        function makeTagList(tag) {
+            let temp_html = `<button class="button is-success is-outlined">${tag}</button>`
+            $('#tag-all').append(temp_html)
+        }
+
+    </script>
+    <script>
+        // Initialize and add the map
+        function initMap() {
+            // The location of Uluru
+            const uluru = {lat: -25.344, lng: 131.036};
+            // The map, centered at Uluru
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: uluru,
+            });
+            // The marker, positioned at Uluru
+            const marker = new google.maps.Marker({
+                position: uluru,
+                map: map,
+            });
+        }
+    </script>
+
+</head>
+<body>
+<!--NavBar-->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="allaboutsaigon_logo">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+</nav>
+
+
+<!--aside -->
+<aside class="menu">
+    <div id="tag-all" class="buttons">
+
+    </div>
+</aside>
+
+<!--result -->
+<div id="map"></div>
+
+</body>

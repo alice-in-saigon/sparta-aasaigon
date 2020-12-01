@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All About Saigon | The simple way to get the city</title>
+
+    <!--    Bulma-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+
+    <!--    FONT-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!--    CSS-->
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .homePhoto_section {
+            height: 65vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            color: black;
+            background-image: url("{{ url_for('static', filename='images/cover2.jpg') }}");
+            background-size: cover;
+            background-position: center;
+        }
+
+
+        .homePhoto_section h2 {
+            margin-bottom: 0.5rem;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .buttons {
+            margin: 2rem;
+            justify-content: center;
+        }
+
+        .widget {
+            width: 70%;
+            margin: auto;
+        }
+
+        .desc {
+            width: 70%;
+            margin: auto;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 20px;
+        }
+
+    </style>
+    <!--    JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            readPlace();
+        });
+
+        function readPlace() {
+            $.ajax({
+                type: "GET",
+                url: "/places",
+                data: {},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        let tags = response['tags']
+                        for (let i = 0; i < tags.length; i++) {
+                            makeTagList(tags[i]['tag']);
+                        }
+
+                    } else {
+                        alert('태그를 받아오지 못했습니다');
+                    }
+                }
+            })
+        }
+
+        function makeTagList(tag) {
+            let temp_html = `<button class="button is-success is-outlined">${tag}</button>`
+            $('#tag-all').append(temp_html)
+        }
+
+    </script>
+</head>
+<body>
+<!--NavBar-->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="allaboutsaigon_logo">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+    </nav>
+<!--Main Photo-->
+
+<section class=" homePhoto_section">
+    <h1>All about Saigon</h1>
+    <h2>어떤 곳에 가고 싶으세요?</h2>
+
+</section>
+
+<!--Tags-->
+
+<div id="tag-all" class="buttons">
+
+</div>
+
+<!-- Instagram -->
+<p class="desc">Follow the Instagram @placesinhcmc</p>
+<div class="widget">
+    <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/bb4233d623175b17875ac952f185c8e3.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;"></iframe>
+</div>
+
+</body>
+</html>

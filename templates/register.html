@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All About Saigon | Place Register</title>
+    <!--    Bulma-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+
+    <!--    FONT-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!--    CSS-->
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .title {
+            margin: 2rem
+        }
+
+        .inputbox {
+            margin: 3rem;
+        }
+
+        .inputbox .field {
+            width: 50%;
+        }
+
+        button {
+            margin-top: 2rem;
+        }
+
+    </style>
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            readPlace();
+        });
+
+        function readPlace() {
+            $.ajax({
+                type: "GET",
+                url: "/places",
+                data: {},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        let places = response['places'];
+                        // 2. 성공했을 때 리뷰를 올바르게 화면에 나타내기
+                        for (let i = 0; i < places.length; i++) {
+                            makePlaceList(places[i]['name'], places[i]['desc'], places[i]['address'], places[i]['mapurl'], places[i]['instaurl'], places[i]['tag'], places[i]['lat'], places[i]['lng']);
+                        }
+                    } else {
+                        alert('장소를 받아오지 못했습니다');
+                    }
+                }
+            })
+        }
+
+        function makePlaceList(name, desc, address, mapurl, instaurl, tag, lat, lng) {
+            let temp_html = `    <tr>
+                                    <td>${name}</td>
+                                    <td>${desc}</td>
+                                    <td>${address}</td>
+                                    <td>${mapurl}</td>
+                                    <td>${instaurl}</td>
+                                    <td>${tag}</td>
+                                    <td>${lat}</td>
+                                    <td>${lng}</td>
+                                </tr>`
+            $('#place-content').append(temp_html)
+        }
+
+
+        function makePlace() {
+            // 1. 장소 정보를 가져온다
+            let name = $('#name').val();
+            let desc = $('#desc').val();
+            let address = $('#address').val();
+            let mapurl = $('#mapURL').val();
+            let instaurl = $('#instaURL').val();
+            let tag = $('#tag').val();
+            let lat = $('#lat').val();
+            let lng = $('#lng').val();
+
+            // 2. 제목, 저자, 리뷰 중 하나라도 입력하지 않았을 경우 alert를 띄웁니다.
+            if (name == "") {
+                alert('장소명을 입력해주세요');
+            } else if (desc == "") {
+                alert('상세정보를 입력해주세요');
+            } else if (address == "") {
+                alert('주소를 입력해주세요');
+            } else if (mapurl == "") {
+                alert('구글맵 URL을 입력해주세요');
+            } else if (tag == "") {
+                alert('태그를 1개 이상 입력해주세요');
+            } else if (lat == "") {
+                alert('위도를 입력해주세요');
+            } else if (lng == "") {
+                alert('경도를 입력해주세요');
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/places",
+                    data: {
+                        name_give: name, desc_give: desc, address_give: address, mapurl_give: mapurl,
+                        instaurl_give: instaurl, tag_give: tag, lat_give: lat, lng_give: lng
+                    },
+                    success: function (response) {
+                        if (response["result"] == "success") {
+                            alert(response["msg"]);
+                            window.location.reload();
+                        }
+                    }
+                })
+            }
+        }
+
+        // 3. POST /review 에 저장을 요청합니다.
+
+    </script>
+
+
+</head>
+<body>
+<!--NavBar-->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="allaboutsaigon_logo">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+</nav>
+
+<!--Title-->
+<h1 class="title">장소 등록</h1>
+<div class="inputbox">
+    <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+            <input class="input" type="text" id="name">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Description</label>
+        <div class="control">
+            <input class="input" type="text" id="desc">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Address</label>
+        <div class="control">
+            <input class="input" type="text" id="address">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Google Map URL</label>
+        <div class="control">
+            <input class="input" type="text" id="mapURL">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Instagram URL</label>
+        <div class="control">
+            <input class="input" type="text" id="instaURL">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Tag</label>
+        <div class="control">
+            <input class="input" type="text" id="tag">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Lat(위도)</label>
+        <div class="control">
+            <input class="input" type="text" id="lat">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Lng(경도)</label>
+        <div class="control">
+            <input class="input" type="text" id="lng">
+        </div>
+    </div>
+
+    <div class="control">
+        <button onclick="makePlace()" class="button is-primary">Submit</button>
+    </div>
+
+</div>
+
+</body>
+</html>

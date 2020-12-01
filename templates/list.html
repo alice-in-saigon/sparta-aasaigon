@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All About Saigon | Place List</title>
+    <!--    Bulma-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+
+    <!--    FONT-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <!--    CSS-->
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .title {
+            margin: 2rem
+        }
+
+        .inputbox {
+            margin: 3rem;
+        }
+
+        .inputbox .field {
+            width: 50%;
+        }
+
+        button {
+            margin-top: 2rem;
+        }
+
+        .table {
+            margin: 2rem;
+        }
+
+    </style>
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            readPlace();
+        });
+
+        function readPlace() {
+            $.ajax({
+                type: "GET",
+                url: "/places",
+                data: {},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        let places = response['places'];
+                        console.log(places)
+                        // 2. 성공했을 때 리뷰를 올바르게 화면에 나타내기
+                        for (let i = 0; i < places.length; i++) {
+                            makePlaceList(places[i]['name'], places[i]['desc'], places[i]['address'], places[i]['mapurl'], places[i]['instaurl'],places[i]['lat'], places[i]['lng'], places[i]['tags']);
+                        }
+                    } else {
+                        alert('장소를 받아오지 못했습니다');
+                    }
+                }
+            })
+        }
+
+        function makePlaceList(name, desc, address, mapurl, instaurl, lat, lng, tags) {
+            let temp_html = `    <tr>
+                                    <td>${name}</td>
+                                    <td>${desc}</td>
+                                    <td>${address}</td>
+                                    <td>${mapurl}</td>
+                                    <td>${instaurl}</td>
+                                    <td>${tags}</td>
+                                    <td>${lat}</td>
+                                    <td>${lng}</td>
+                                </tr>`
+            $('#place-content').append(temp_html)
+        }
+
+
+
+
+    </script>
+
+
+</head>
+<body>
+<!--NavBar-->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="allaboutsaigon_logo">
+        </a>
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+</nav>
+
+<!--Title-->
+<h1 class="title">장소 목록</h1>
+
+<!-- List -->
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Desc</th>
+        <th scope="col">Address</th>
+        <th scope="col">Map URL</th>
+        <th scope="col">Insta URL</th>
+        <th scope="col">Tag</th>
+        <th scope="col">Lat</th>
+        <th scope="col">Lng</th>
+    </tr>
+    </thead>
+    <tbody id="place-content">
+    </tbody>
+</table>
+</body>
