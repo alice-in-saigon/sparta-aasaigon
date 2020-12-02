@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All About Saigon | The simple way to get the city</title>
+
+    <meta property="og:title" content="Places in HCMC"/>
+    <meta property="og:description" content="The simple way to get the city"/>
+    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/>
+
+    <title>Places in HCMC | The simple way to get the city</title>
 
     <!--    Bulma-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
@@ -22,8 +27,8 @@
             flex-direction: column;
             justify-content: center;
             text-align: center;
-            color: black;
-            background-image: url("{{ url_for('static', filename='images/cover2.jpg') }}");
+            color: white;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("{{ url_for('static', filename='images/cover2.jpg') }}");
             background-size: cover;
             background-position: center;
         }
@@ -31,13 +36,14 @@
 
         .homePhoto_section h2 {
             margin-bottom: 0.5rem;
-            font-size: 28px;
+            font-size: 2rem;
             font-weight: bold;
         }
 
         .buttons {
             margin: 2rem;
             justify-content: center;
+            font-size: 1rem;
         }
 
         .widget {
@@ -86,27 +92,29 @@
         }
 
         function makeTagList(tag) {
-            let temp_html = `<button class="button is-success is-outlined">${tag}</button>`
+            let temp_html = `<button class="button is-success is-outlined" id="tag_name" onclick="resultPlace()">${tag}</button>`
             $('#tag-all').append(temp_html)
         }
+
+        
 
     </script>
 </head>
 <body>
 <!--NavBar-->
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
         <a class="navbar-item" href="#">
-          <img src="{{ url_for('static', filename='images/logo.png') }}" alt="allaboutsaigon_logo">
+            <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="allaboutsaigon_logo">
         </a>
 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
         </a>
-      </div>
-    </nav>
+    </div>
+</nav>
 <!--Main Photo-->
 
 <section class=" homePhoto_section">
@@ -124,7 +132,9 @@
 <!-- Instagram -->
 <p class="desc">Follow the Instagram @placesinhcmc</p>
 <div class="widget">
-    <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script><iframe src="//lightwidget.com/widgets/bb4233d623175b17875ac952f185c8e3.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;"></iframe>
+    <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
+    <iframe src="//lightwidget.com/widgets/bb4233d623175b17875ac952f185c8e3.html" scrolling="no"
+            allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;"></iframe>
 </div>
 
 </body>

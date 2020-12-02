@@ -2,13 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All About Saigon | Result</title>
+    <title>Places in HCMC | Result</title>
+
     <!--    Bulma-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
 
     <!--    FONT-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+    <!-- script -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2kupmiSd2rMEVxovFdISdo1GYoVDBOLU&callback=initMap&libraries=&v=weekly"
+            defer
+    ></script>
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+
     <!--    CSS-->
     <style>
         * {
@@ -20,9 +34,6 @@
             width: 50%;
         }
 
-        button {
-            margin-top: 2rem;
-        }
 
         aside {
             width: 20%;
@@ -32,15 +43,10 @@
             margin: 1rem;
         }
 
+        #map {
+            height: 100%;
+        }
     </style>
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDLbNKKvyuwCEQuM9KwR9x5FbeK-Q0KrtE&callback=initMap">
-    </script>
 
     <script type="text/javascript">
 
@@ -73,26 +79,9 @@
         }
 
     </script>
-    <script>
-        // Initialize and add the map
-        function initMap() {
-            // The location of Uluru
-            const uluru = {lat: -25.344, lng: 131.036};
-            // The map, centered at Uluru
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 4,
-                center: uluru,
-            });
-            // The marker, positioned at Uluru
-            const marker = new google.maps.Marker({
-                position: uluru,
-                map: map,
-            });
-        }
-    </script>
 
 </head>
-<body>
+
 <!--NavBar-->
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
@@ -106,17 +95,16 @@
             <span aria-hidden="true"></span>
         </a>
     </div>
-</nav>
 
+</nav>
+<body>
 
 <!--aside -->
 <aside class="menu">
     <div id="tag-all" class="buttons">
-
     </div>
+    <!--result -->
+
 </aside>
-
-<!--result -->
 <div id="map"></div>
-
 </body>

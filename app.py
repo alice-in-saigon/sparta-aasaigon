@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 from pymongo import MongoClient
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb://sparta:woowa@13.209.35.193',27017)
 db = client.dbsparta
 
 ## HTML을 주는 부분
@@ -97,11 +97,14 @@ def readPlace():
 
     return jsonify({'result': 'success', 'places': places_list, 'tags': list(db.tags.find({}, {'_id': False}))})
 
-
-# list에서 place 단위로 tag 묶어서 보여주기
 # 메인에서 tag 눌렀을 때 결과 페이지에 마커 표시를 어떻게? --> 일단 지도 위에 나오기 전에 result를 리스트로 나오게?
 # tag 많이 작성된 순서로 노출하려면 count 값을 추가해야하지 않을까 / 일단 이건 나중에.. 
-# 내일 저녁까지 배포완료!
+
+# @app.route('/result', methods=['GET'])
+# def resultPlace():
+    # 버튼 클릭 시 tag_id 얻기
+
+
 
 
 
