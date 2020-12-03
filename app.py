@@ -1,5 +1,4 @@
 from flask import Flask, render_template, jsonify, request
-from openpyxl import load_workbook
 
 app = Flask(__name__)
 
@@ -7,6 +6,16 @@ from pymongo import MongoClient
 
 client = MongoClient('mongodb://sparta:woowa@13.209.35.193',27017)
 db = client.dbsparta
+
+from openpyxl import load_workbook
+load_wb = load_workbook("C:/Users/Alice/Desktop/sparta/projects/saigon/test.xlsx")
+load_ws = load_wb['places']
+max_row = load_ws.max_row
+#엑셀파일 데이터 읽기
+for i in range(1, max_row + 1):
+    cell_obj = load_ws.cell(row = 1, column = i)
+    print(cell_obj.value)
+
 
 ## HTML을 주는 부분
 @app.route('/')
@@ -21,9 +30,9 @@ def registerPage():
 def listPage():
     return render_template('list.html')
 
-@app.route('/result', methods=['GET'])
-def resultPage():
-    return render_template('result.html')
+
+
+
 
 
 ## API 역할을 하는 부분
@@ -96,14 +105,6 @@ def readPlace():
         places_list.append(place)
 
     return jsonify({'result': 'success', 'places': places_list, 'tags': list(db.tags.find({}, {'_id': False}))})
-
-# 메인에서 tag 눌렀을 때 결과 페이지에 마커 표시를 어떻게? --> 일단 지도 위에 나오기 전에 result를 리스트로 나오게?
-# tag 많이 작성된 순서로 노출하려면 count 값을 추가해야하지 않을까 / 일단 이건 나중에.. 
-
-# @app.route('/result', methods=['GET'])
-# def resultPlace():
-    # 버튼 클릭 시 tag_id 얻기
-
 
 
 

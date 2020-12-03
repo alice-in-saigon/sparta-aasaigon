@@ -5,7 +5,7 @@
 
     <meta property="og:title" content="Places in HCMC"/>
     <meta property="og:description" content="The simple way to get the city"/>
-    <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/>
+    <meta property="og:image" content="{{ url_for('static', filename='images/ogimage.png') }}"/>
 
     <title>Places in HCMC | The simple way to get the city</title>
 
@@ -52,11 +52,41 @@
         }
 
         .desc {
-            width: 70%;
-            margin: auto;
-            margin-top: 2rem;
+            width: 100%;
+            text-align: center;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            font-size: 20px;
+        }
+
+        #map {
+            width: 80%;
+            margin: auto;
+            height: 500px;
+            margin-bottom: 2rem;
+        }
+
+        /* Media Query */
+        @media (max-width: 1279px) {
+
+            .homePhoto_section {
+                height: 30vh;
+            }
+
+            .homePhoto_section h2 {
+                margin-bottom: 0.5rem;
+                font-size: 3rem;
+                font-weight: bold;
+            }
+
+            .widget {
+                width: 100%;
+            }
+
+            .buttons {
+                font-size: 2rem;
+            }
+
+
         }
 
     </style>
@@ -65,6 +95,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2kupmiSd2rMEVxovFdISdo1GYoVDBOLU&callback=initMap&libraries=&v=weekly"
+            defer
+    ></script>
 
     <script type="text/javascript">
 
@@ -96,23 +130,40 @@
             $('#tag-all').append(temp_html)
         }
 
-        
+        function resultPlace() {
+            let tag_name = $('#tag_name').val();
+            console.log(tag_name)
+        }
 
     </script>
+    <script>
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: {lat: 10.776561, lng: 106.6987833},
+                zoom: 13,
+            });
+
+            new google.maps.Marker({
+                position: {lat: 10.776561, lng: 106.6987833},
+                map,
+                title: "Hello World!",
+            });
+        }
+
+
+    </script>
+
 </head>
 <body>
 <!--NavBar-->
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="#">
+        <a class="navbar-item" href="/">
             <img src="{{ url_for('static', filename='images/logo2.png') }}" alt="allaboutsaigon_logo">
         </a>
 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
     </div>
 </nav>
 <!--Main Photo-->
@@ -129,8 +180,11 @@
 
 </div>
 
+<!--map-->
+<div id="map"></div>
+
 <!-- Instagram -->
-<p class="desc">Follow the Instagram @placesinhcmc</p>
+<p class="desc">Recent posts on Instagram</p>
 <div class="widget">
     <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
     <iframe src="//lightwidget.com/widgets/bb4233d623175b17875ac952f185c8e3.html" scrolling="no"
@@ -138,4 +192,12 @@
 </div>
 
 </body>
+<footer class="footer">
+    <div class="content has-text-centered">
+
+        <strong>Places in HCMC</strong> by Alice <br>
+        <strong>Contact / </strong> Instagram: <a href="https://www.instagram.com/placesinhcmc/>">@placesinhcmc</a>
+
+    </div>
+</footer>
 </html>
