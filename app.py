@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 from pymongo import MongoClient
 
-client = MongoClient('mongodb://sparta:woowa@13.209.35.193',27017)
+client = MongoClient('mongodb://ID:PWa@13.209.35.193',27017)
 db = client.dbsparta
 
 from openpyxl import load_workbook
