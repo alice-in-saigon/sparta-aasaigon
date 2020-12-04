@@ -126,13 +126,12 @@
         }
 
         function makeTagList(tag) {
-            let temp_html = `<button class="button is-success is-outlined" id="tag_name" onclick="resultPlace()">${tag}</button>`
+            let temp_html = `<button class="button is-success is-outlined" id="tag_name_${tag}" onclick="resultPlace('${tag}')">${tag}</button>`
             $('#tag-all').append(temp_html)
         }
 
-        function resultPlace() {
-            let tag_name = $('#tag_name').val();
-            console.log(tag_name)
+        function resultPlace(tag) {
+            console.log(tag)
         }
 
     </script>
@@ -145,11 +144,30 @@
                 zoom: 13,
             });
 
-            new google.maps.Marker({
-                position: {lat: 10.776561, lng: 106.6987833},
-                map,
-                title: "Hello World!",
-            });
+        }
+
+        function readPlace() {
+            $.ajax({
+                type: "GET",
+                url: "/places",
+                data: {},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        let places = response['places'];
+                        console.log(places)
+
+                        for (let i = 0; i < places.length; i++) {
+                            let place = places[i];
+                            new google.maps.Marker({
+                                position: {lat: parseInt(places[i]['lat']), lng: parseInt(places[i]['lng'])},
+                                map,
+                            })
+                        }
+                    } else {
+                        alert('장소를 받아오지 못했습니다');
+                    }
+                }
+            })
         }
 
 
