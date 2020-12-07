@@ -21,6 +21,7 @@
             font-family: 'Noto Sans KR', sans-serif;
         }
 
+
         .homePhoto_section {
             height: 65vh;
             display: flex;
@@ -59,8 +60,6 @@
         }
 
         #map {
-            width: 80%;
-            margin: auto;
             height: 500px;
             margin-bottom: 2rem;
         }
@@ -96,11 +95,13 @@
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
     <script
-            src="https://maps.googleapis.com/maps/api/js?key=KEYcallback=initMap&libraries=&v=weekly"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2kupmiSd2rMEVxovFdISdo1GYoVDBOLU&callback=initMap&libraries=&v=weekly"
             defer
     ></script>
 
     <script type="text/javascript">
+        let tag2place = {};
+        let markers = [];
 
         $(document).ready(function () {
             readPlace();
@@ -113,10 +114,49 @@
                 data: {},
                 success: function (response) {
                     if (response['result'] == 'success') {
+                        // 태그 불러오기
                         let tags = response['tags']
+                        let infoWindowList = [];
                         for (let i = 0; i < tags.length; i++) {
                             makeTagList(tags[i]['tag']);
                         }
+
+                        // 장소 불러오기
+                        let places = response['places'];
+                        for (let i = 0; i < places.length; i++) {
+                            let place = places[i];
+
+                            // 마커를 만들기 위한 장소 정보 가져오기
+                            let lng = place['lng'];
+                            let lat = place['lat'];
+                            let name = place['name'];
+                            let marker = new google.maps.Marker({
+                                position: {lat: lat, lng: lng}, // 마커 좌표
+                                map, // 지도 위치
+                                title: name, // 마커에 포인트 갖다대면 뜨는 타이틀
+                            });
+                            // infowindow 정보 넣기
+                            let contentString = `<div><h3 style="font-weight: bold">${name}</h3></div>
+                                                    <p>Address: ${places[i]['address']}</p>
+                                                    <p>${places[i]['desc']}</p>
+                                                    <a href="${places[i]['mapurl']}">Google Map</a><br>
+                                                    <a href="${places[i]['instaurl']}">Instagram</a>`
+                            var infowindow = new google.maps.InfoWindow({
+                                content: contentString
+                            });
+
+                            markers.push(marker);
+                            infoWindowList.push(infowindow);
+                        }
+                        // infowindow List에 넣기
+                        for (let i = 0; i < markers.length; i++) {
+                            markers[i].addListener('click', function () {
+                                infoWindowList[i].open(map, markers[i]);
+                            });
+                        }
+
+
+                        tag2place = response['tag2place'];
 
                     } else {
                         alert('태그를 받아오지 못했습니다');
@@ -131,7 +171,48 @@
         }
 
         function resultPlace(tag) {
-            console.log(tag)
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            // 마커 생성
+
+            markers = [];
+            infoWindowList = [];
+
+
+
+            let places = tag2place[tag]
+
+            for (let i = 0; i < places.length; i++) {
+                let place = places[i];
+
+                let lng = place['lng'];
+                let lat = place['lat'];
+                let name = place['name'];
+                let marker = new google.maps.Marker({
+                    position: {lat: lat, lng: lng},
+                    map,
+                    title: name,
+                });
+
+                // infowindow 정보 넣기
+                let contentString = `<div><h3 style="font-weight: bold">${name}</h3></div>
+                                                    <p>Address: ${places[i]['address']}</p>
+                                                    <p>${places[i]['desc']}</p>
+                                                    <a href="${place[i]['mapurl']}">Google Map</a><br>
+                                                    <a href="${place[i]['instaurl']}">Instagram</a>`
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+                markers.push(marker);
+                infoWindowList.push(infowindow);
+            }
+            // infowindow List에 넣기
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].addListener('click', function () {
+                    infoWindowList[i].open(map, markers[i]);
+                });
+            }
         }
 
     </script>
@@ -143,31 +224,6 @@
                 center: {lat: 10.776561, lng: 106.6987833},
                 zoom: 13,
             });
-
-        }
-
-        function readPlace() {
-            $.ajax({
-                type: "GET",
-                url: "/places",
-                data: {},
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        let places = response['places'];
-                        console.log(places)
-
-                        for (let i = 0; i < places.length; i++) {
-                            let place = places[i];
-                            new google.maps.Marker({
-                                position: {lat: parseInt(places[i]['lat']), lng: parseInt(places[i]['lng'])},
-                                map,
-                            })
-                        }
-                    } else {
-                        alert('장소를 받아오지 못했습니다');
-                    }
-                }
-            })
         }
 
 
